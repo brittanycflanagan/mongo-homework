@@ -3,6 +3,10 @@ var mongojs = require("mongojs");
 var bodyParser = require("body-parser");
 var logger = require("morgan");
 var mongoose = require("mongoose");
+const routes = require("./controllers/router");
+
+//HANDLEBARS*
+var exphbs = require("express-handlebars");
 
 // Our scraping tools
 // Axios is a promised-based http library, similar to jQuery's Ajax method
@@ -12,11 +16,16 @@ var cheerio = require("cheerio");
 
 // Require all models
 var db = require("./models");
+// Initialize Express
+var app = express();
 
 var PORT = 3000;
 
-// Initialize Express
-var app = express();
+
+
+// Set Handlebars as the default templating engine.
+app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+app.set("view engine", "handlebars");
 
 // Configure middleware
 
@@ -24,13 +33,22 @@ var app = express();
 app.use(logger("dev"));
 // Use body-parser for handling form submissions
 app.use(bodyParser.urlencoded({ extended: true }));
+
 // Use express.static to serve the public folder as a static directory
 app.use(express.static("public"));
+
+
 
 // Connect to the Mongo DB
 mongoose.connect("mongodb://localhost/goodnewsnetwork");
 
 // Routes
+
+app.get("/", (req, res) => {
+  res.render("index");
+  console.log(req.user);
+ 
+});
 
 
 // A GET route for scraping the echoJS website

@@ -1,0 +1,63 @@
+
+      body { 
+          background-color: white;
+         
+        }
+
+    .navbar-brand {
+          font-size:500px;
+         }
+
+    .nav-item {
+        padding: 20px;
+    }
+      .jumbotron {
+        background-image: url("images/advertisements-batch-blur-518543.jpg");
+        opacity: 0.85;
+        background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+        color: white;
+        text-shadow: 2px 2px #000000;
+
+      }
+      .display-4 {
+          font-size: 100px;
+          font-weight: bold; 
+      }
+
+      .lead {
+          font-weight: 400;
+          font-size: 30px;
+      }
+      /* #wrapper {
+        width: 960px;
+        margin-left: auto;
+        margin-right: auto;
+        padding-top: 5%;
+      }
+      #articles {
+        display: inline-block;
+        overflow: auto;
+        width: 60%;
+        height: 700px;
+      }
+      #notes {
+        float: right;
+        width: 30%;
+      }
+      textarea, input {
+        display: block;
+        width: 100%;
+        background-color: #FCF5C7;
+      }
+      input {
+        height: 36px;
+        font-size: 24px;
+      }
+      
+      textarea {
+        height: 200px;
+        font-size: 18px;
+      }
+     */
