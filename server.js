@@ -50,6 +50,12 @@ app.get("/", (req, res) => {
  
 });
 
+app.get("/saved-articles", (req, res) => {
+  res.render("saved-articles");
+  console.log(req.user);
+ 
+});
+
 
 // A GET route for scraping the echoJS website
 app.get("/scrape", function(req, res) {
@@ -69,7 +75,7 @@ app.get("/scrape", function(req, res) {
         .text();
       result.link = $(this)
         .children("a")
-        .attr("href");
+        .attr("href");  
      // result.saved = false;
 
         console.log(result);
@@ -87,7 +93,11 @@ app.get("/scrape", function(req, res) {
     });
 
     // If we were able to successfully scrape and save an Article, send a message to the client
-    res.send("Scrape Complete");
+     
+    res.send("scrape complete");
+    
+    
+    
   });
 });
 

@@ -1,13 +1,106 @@
 // Grab the articles as a json
 $.getJSON("/articles", function(data) {
   // For each one
-  for (var i = 0; i < data.length; i++) {
+  for (let i = 0; i < data.length; i++) {
     // Display the apropos information on the page
-    $("#articles").append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].link + "</p>");
-    $("#articles").append("<a href='"+data[i].link+"'> Read Article</a>");
+    // $("#articles").append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].link + "</p>");
+    // $("#articles").append("<a href='"+data[i].link+"'> Read Article</a>");
+    $('#articles').append(`
+    <br/> 
+    <div class="card">
+       
+    <div class="card-body">
+        <h5 class="card-title"  data-id="${data[i]._id}">${data[i].title}</h5>
+        
+        <a href="${data[i].link}" class="btn btn-primary">Read Article</a>
+        <span id="card${i}"></span>
+    </div>
+    </div>`
+      
+    )
+    if (data[i].saved === false) {//Button to Save Article
+      $("#card"+i).append(`
+      <button type="button" class="btn btn-dark" data-id="${data[i]._id}" id="savearticle">Save Article</button>
+      `);
+      }
+    
+      if (data[i].saved === true) {//Button to Save Article
+        $("#card"+i).append(`
+        
+        <span class="alert alert-success" role="alert">Article Saved!</span>
+          `); 
+      }
+
+      // if (data[i].saved === true) {//Button to Save Article
+      //   $("#card"+i).append(`
+      //   <button type="button" class="btn btn-secondary" data-id="${data[i]._id}" id="deletearticle">Remove Article From Saved</button>
+      //     `); 
+      // }
   }
+
 });
 
+$.getJSON("/saved", function(data) {
+  // For each one
+  for (let i = 0; i < data.length; i++) {
+    // Display the apropos information on the page
+    // $("#articles").append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].link + "</p>");
+    // $("#articles").append("<a href='"+data[i].link+"'> Read Article</a>");
+    $('#saved-articles').append(`
+    <br/> 
+    <div class="card">
+       
+    <div class="card-body">
+        <h5 class="card-title"  data-id="${data[i]._id}">${data[i].title}</h5>
+        
+        <a href="${data[i].link}" class="btn btn-primary">Read Article</a>
+        <span id="card${i}"></span> <button type="button" class="btn btn-secondary" data-id="${data[i]._id}" id="deletearticle">Remove Article From Saved</button>
+    </div>
+    </div>`
+      
+    )
+    // if (data[i].saved === false) {//Button to Save Article
+    //   $("#card"+i).append(`
+    //   <button type="button" class="btn btn-dark" data-id="${data[i]._id}" id="savearticle">Save Article</button>
+    //   `);
+    //   }
+    
+      // if (data[i].saved === true) {//Button to Save Article
+      //   $("#card"+i).append(`
+        
+      //   <span class="alert alert-success" role="alert">Article Saved!</span>
+      //     `); 
+      // }
+
+      
+  }
+
+});
+
+
+/* <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> */
+
+// Whenever someone clicks a p tag
+$(document).on("click", "#scrape", function() {
+
+  event.preventDefault();
+
+  // Now make an ajax call for the Article
+  $.ajax({
+    method: "GET",
+    url: "/scrape"
+  })
+    // With that done, add the note information to the page
+    .then(function(data) {
+      console.log(data);
+      // $('#myModal').modal('show');
+      $("#myModal").show();
+  });
+  });
+
+$(document).on("click", "#closemodal", function(){
+  $("#myModal").hide();
+})
 
 // Whenever someone clicks a p tag
 $(document).on("click", "p", function() {
@@ -35,13 +128,13 @@ $(document).on("click", "p", function() {
       $("#notes").append("<textarea id='bodyinput' name='body'></textarea>");
       // A button to submit a new note, with the id of the article saved to it
       $("#notes").append("<button data-id='" + data._id + "' id='savenote'>Save Note</button>");
-      if (data.saved === false) {//Button to Save Article
-        $("#notes").append("<button data-id='" + data._id + "' id='savearticle'>Save Article</button>");
-        }
+      // if (data.saved === false) {//Button to Save Article
+      //   $("#notes").append("<button data-id='" + data._id + "' id='savearticle'>Save Article</button>");
+      //   }
       
-      if (data.saved === true) {//Button to Save Article
-          $("#notes").append("<button data-id='" + data._id + "' id='deletearticle'>Delete Article</button>");
-      }
+      // if (data.saved === true) {//Button to Save Article
+      //     $("#notes").append("<button data-id='" + data._id + "' id='deletearticle'>Delete Article</button>");
+      // }
 
       if (data.note) {
         console.log(data.note[0].title);
@@ -127,6 +220,9 @@ $(document).on("click", "#deletenote", function() {
 // When you click the savearticle button
 $(document).on("click", "#savearticle", function() {
   // Grab the id associated with the article from the submit button
+
+  $(this).replaceWith(`<span class="alert alert-success" role="alert">Article Saved!</span>`); 
+  
   var thisId = $(this).attr("data-id");
 
   // Run a POST request to change the note, using what's entered in the inputs
@@ -141,6 +237,9 @@ $(document).on("click", "#savearticle", function() {
     // With that done
     .then(function(data) {
       // Log the response
+      //Button to Save Article
+        
+      
       console.log(data);
       // Empty the notes section
       // $("#notes").empty();

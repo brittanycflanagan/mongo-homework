@@ -3,7 +3,10 @@
           background-color: white;
          
         }
-
+      .articles {
+        padding:15px 50px;
+      }
+    
     .navbar-brand {
           font-size:500px;
          }
