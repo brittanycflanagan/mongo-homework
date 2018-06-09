@@ -1,13 +1,10 @@
 
-       /* body { 
-        background-color: white;
-       
-      } */
+  
       body { 
           background-color: white;
          
         }
-      .articles {
+      .articles { 
         padding:15px 50px;
       }
     #bodyinput {
