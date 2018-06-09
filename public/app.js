@@ -10,9 +10,9 @@ $.getJSON("/articles", function(data) {
     <div class="card">
        
     <div class="card-body">
-        <h5 class="card-title"  data-id="${data[i]._id}">${data[i].title}</h5>
+        <h5 class="card-title">${data[i].title}</h5>
         
-        <a href="${data[i].link}" class="btn btn-primary" target="_blank">Read Article</a>
+        <a href="${data[i].link}" class="btn btn-primary" target="_blank">Read Article</a> <button class="btn btn btn-info" target="_blank" id="addNote" data-id="${data[i]._id}">Add Notes</button>
         <span id="card${i}"></span>
     </div>
     </div>`
@@ -100,10 +100,11 @@ $(document).on("click", "#scrape", function() {
 
 $(document).on("click", "#closemodal", function(){
   $("#myModal").hide();
+  location.reload();
 })
 
 // Whenever someone clicks a p tag
-$(document).on("click", "h5", function() {
+$(document).on("click", "#addNote", function() {
   // Empty the notes from the note section
   $("#notes").empty();
   $("#button").empty();
