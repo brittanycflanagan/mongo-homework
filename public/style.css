@@ -6,7 +6,11 @@
       .articles {
         padding:15px 50px;
       }
-    
+    #bodyinput {
+      width:100%;
+   
+    }
+   
     .navbar-brand {
           font-size:500px;
          }
@@ -23,6 +27,9 @@
         color: white;
         text-shadow: 2px 2px #000000;
 
+      }
+      .deletenotebutton {
+        padding:20px;
       }
       .display-4 {
           font-size: 100px;

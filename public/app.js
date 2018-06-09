@@ -12,7 +12,7 @@ $.getJSON("/articles", function(data) {
     <div class="card-body">
         <h5 class="card-title"  data-id="${data[i]._id}">${data[i].title}</h5>
         
-        <a href="${data[i].link}" class="btn btn-primary">Read Article</a>
+        <a href="${data[i].link}" class="btn btn-primary" target="_blank">Read Article</a>
         <span id="card${i}"></span>
     </div>
     </div>`
@@ -103,7 +103,7 @@ $(document).on("click", "#closemodal", function(){
 })
 
 // Whenever someone clicks a p tag
-$(document).on("click", "p", function() {
+$(document).on("click", "h5", function() {
   // Empty the notes from the note section
   $("#notes").empty();
   $("#button").empty();
@@ -120,14 +120,14 @@ $(document).on("click", "p", function() {
       console.log(data);
       // The title of the article
      
-
-      $("#notes").append("<h2>" + data.title + "</h2>");
+      $("#NotesModal").show();
+      $("#modal-body").append("<p>Add a Note to this article</p>");
       // An input to enter a new title
-      $("#notes").append("<input id='titleinput' name='title' >");
+      // $("#modal-body").append("<input id='titleinput' name='title' >");
       // A textarea to add a new note body
-      $("#notes").append("<textarea id='bodyinput' name='body'></textarea>");
+      $("#modal-body").append("<textarea id='bodyinput' name='body'></textarea>");
       // A button to submit a new note, with the id of the article saved to it
-      $("#notes").append("<button data-id='" + data._id + "' id='savenote'>Save Note</button>");
+      $("#modal-footer").append(`<button type="button" data-id="${data._id}" id="savenote" class="btn btn-primary">Okay!</button>`);
       // if (data.saved === false) {//Button to Save Article
       //   $("#notes").append("<button data-id='" + data._id + "' id='savearticle'>Save Article</button>");
       //   }
@@ -140,11 +140,10 @@ $(document).on("click", "p", function() {
         console.log(data.note[0].title);
         console.log(data.note.length);
           for (let i = 0; i < data.note.length; i++) { 
-            $("#notes").prepend("<div id='currentnote"+i+"'></div><button note-id='" + data.note[i]._id + "' id='deletenote'>Delete Note</button>");
+            $("#currentnote").append(`<div id="deletenote" note-id="${data.note[i]._id}"><span class="deletenotebutton" id="currentnote${i}">${data.note[i].body}</span><button class="btn btn-danger">X</button></div>`);
           // Place the title of the note in the title input
-          $("#currentnote"+i).text(data.note[i].title);
+          // $("#currentnote"+i).text(data.note[i].title);
           // Place the body of the note in the body textarea
-          $("#currentnote"+i).text(data.note[i].body);
         }
         
       }
@@ -160,9 +159,13 @@ $(document).on("click", "p", function() {
 
 // When you click the savenote button
 $(document).on("click", "#savenote", function() {
+ 
   // Grab the id associated with the article from the submit button
   var thisId = $(this).attr("data-id");
-
+  
+  if ($("#bodyinput").val() === ""){
+    $("#NotesModal").hide();
+  } else {
   // Run a POST request to change the note, using what's entered in the inputs
   $.ajax({
     method: "POST",
@@ -179,19 +182,25 @@ $(document).on("click", "#savenote", function() {
       // Log the response
       console.log(data);
       // Empty the notes section
-      $("#notes").empty();
+     
+      $("#NotesModal").hide();
     });
-
+  }
   // Also, remove the values entered in the input and textarea for note entry
-  $("#titleinput").val("");
-  $("#bodyinput").val("");
+  //$("#titleinput").val("");
+  $("#currentnote").replaceWith(`<div id="currentnote"></div>`);
+  $("#modal-body").replaceWith(`<div class="modal-body" id="modal-body"></div>`);
+  $("#modal-footer").replaceWith(`<div class="modal-footer" id="modal-footer">`);
+  
+
 });
 
 ///////////
 $(document).on("click", "#deletenote", function() {
   // Grab the id associated with the article from the submit button
+  
   var thisId = $(this).attr("note-id");
-
+ 
   // Run a POST request to change the note, using what's entered in the inputs
   $.ajax({
     method: "POST",
@@ -210,10 +219,12 @@ $(document).on("click", "#deletenote", function() {
       // Empty the notes section
       // $("#notes").empty();
     });
-
+    $(this).replaceWith(""); 
   // Also, remove the values entered in the input and textarea for note entry
   // $("#titleinput").val("");
   // $("#bodyinput").val("");
+
+ // $("#deletenote").replaceWith("");
 });
 
 
@@ -253,8 +264,9 @@ $(document).on("click", "#savearticle", function() {
 // When you click the deletearticle button
 $(document).on("click", "#deletearticle", function() {
   // Grab the id associated with the article from the submit button
+  
   var thisId = $(this).attr("data-id");
-
+  $(this).replaceWith(`<span class="alert alert-danger role="alert">Article Removed!</span>`);
   // Run a POST request to change the note, using what's entered in the inputs
   $.ajax({
     method: "POST",
