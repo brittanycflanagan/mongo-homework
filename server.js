@@ -5,7 +5,7 @@ var logger = require("morgan");
 var mongoose = require("mongoose");
 const routes = require("./controllers/router");
 
-//HANDLEBARS*
+//HANDLEBARS* //test
 var exphbs = require("express-handlebars");
 
 // Our scraping tools
