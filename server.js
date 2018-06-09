@@ -64,11 +64,19 @@ app.get("/scrape", function(req, res) {
     // Then, we load that into cheerio and save it to $ for a shorthand selector
     var $ = cheerio.load(response.data);
 
+    db.Article.find({})
+      .then(function(dbArticle) {
+        // If we were able to successfully find Articles, send them back to the client
+         //console.log("JUST ONE:"+dbArticle[1].title);
+    
+
+
     // Now, we grab every h2 within an article tag, and do the following:
     $("h3").each(function(i, element) {
       // Save an empty result object
+      
       var result = {};
-
+     
       // Add the text and href of every link, and save them as properties of the result object
       result.title = $(this)
         .children("a")
@@ -76,20 +84,35 @@ app.get("/scrape", function(req, res) {
       result.link = $(this)
         .children("a")
         .attr("href");  
-     // result.saved = false;
 
-        console.log(result);
+      var duplicate = false;
+     // console.log("LENGTH:"+dbArticle.length);
+          for (let j=0; j < dbArticle.length; j++) {
+            // console.log("DBARTICLE TITLE:"+dbArticle[j].title);        
+           if (result.title ===  dbArticle[j].title) {
+             duplicate = true;
+            } 
+        }
 
-      // Create a new Article using the `result` object built from scraping
-      db.Article.create(result)
-        .then(function(dbArticle) {
-          // View the added result in the console
-          console.log(dbArticle);
-        })
-        .catch(function(err) {
-          // If an error occurred, send it to the client
-          return res.json(err);
-        });
+        if (duplicate === false) {
+
+          // Create a new Article using the `result` object built from scraping
+          db.Article.create(result)
+            .then(function(dbArticle1) {
+              // View the added result in the console
+              // console.log(dbArticle1);
+            })
+            .catch(function(err) {
+              // If an error occurred, send it to the client
+              return res.json(err);
+            });        
+      }
+    });  
+  
+  })
+    .catch(function(err) {
+      // If an error occurred, send it to the client
+      res.json(err);
     });
 
     // If we were able to successfully scrape and save an Article, send a message to the client
