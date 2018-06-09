@@ -54,7 +54,7 @@ $.getJSON("/saved", function(data) {
         <h5 class="card-title"  data-id="${data[i]._id}">${data[i].title}</h5>
         
         <a href="${data[i].link}" class="btn btn-primary">Read Article</a>
-        <span id="card${i}"></span> <button type="button" class="btn btn-secondary" data-id="${data[i]._id}" id="deletearticle">Remove Article From Saved</button>
+        <span id="card${i}"></span> <button class="btn btn btn-info" target="_blank" id="addNote" data-id="${data[i]._id}">Add Notes</button> <button type="button" class="btn btn-secondary" data-id="${data[i]._id}" id="deletearticle">Remove Article From Saved</button>
     </div>
     </div>`
       
