@@ -4,6 +4,7 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 // Using the Schema constructor, create a new UserSchema object
+//NOTE: I did not include a summary of the article because the page I was scraping from did not have a sumary available but I really wanted to use that website.
 var ArticleSchema = new Schema({
 
   title: {
@@ -27,7 +28,7 @@ var ArticleSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Note"
   }]
-  
+
 });
 
 // This creates our model from the above schema, using mongoose's model method
