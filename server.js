@@ -274,32 +274,32 @@ app.get("/articles/:id", function(req, res) {
 // ROUTE FOR SAVING ARTICLES
 app.post("/articles/:id", function(req, res) {
   
-  // //REMOVE ARTICLE BUTTON (NEEDED TO CLEAR FROM MLAB DATABASE)
-  //   db.Article.remove({ _id: req.params.id })
-  //     .then(function(dbArticle) {
-  //       return db.Article.findOneAndUpdate({ _id: req.params.id }, { justOne: true});
-  //     })
-  //     .then(function(dbNotes) {
-  //       res.json(dbArticle);
-  //     })
-  //     .catch(function(err) {
-  //       res.json(err);
-  //     });
+  //REMOVE ARTICLE BUTTON (NEEDED TO CLEAR FROM MLAB DATABASE)
+    db.Article.remove({ _id: req.params.id })
+      .then(function(dbArticle) {
+        return db.Article.findOneAndUpdate({ _id: req.params.id }, { justOne: true});
+      })
+      .then(function(dbNotes) {
+        res.json(dbArticle);
+      })
+      .catch(function(err) {
+        res.json(err);
+      });
 
-  db.Article.update(
-    {_id: mongojs.ObjectId(req.params.id)},
-    {$set: {saved: true}},
-    function(error, edited) {
-      if (error) {
-        console.log(error);
-        res.send(error);
-      }
-      else {
-        // console.log(edited);
-        res.send(edited);
-      }
-    }
-  );
+  // db.Article.update(
+  //   {_id: mongojs.ObjectId(req.params.id)},
+  //   {$set: {saved: true}},
+  //   function(error, edited) {
+  //     if (error) {
+  //       console.log(error);
+  //       res.send(error);
+  //     }
+  //     else {
+  //       // console.log(edited);
+  //       res.send(edited);
+  //     }
+  //   }
+  // );
   
 });
 
