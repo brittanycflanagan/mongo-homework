@@ -1,17 +1,20 @@
+//REQUIREMENTS
 var express = require("express");
 var mongojs = require("mongojs");
 var bodyParser = require("body-parser");
 var logger = require("morgan");
 var mongoose = require("mongoose");
-const routes = require("./controllers/router");
-
-//HANDLEBARS* //test
 var exphbs = require("express-handlebars");
+
 
 // Our scraping tools
 // Axios is a promised-based http library, similar to jQuery's Ajax method
 // It works on the client and on the server
-var axios = require("axios");
+
+//*//
+var request = require("request");
+//var axios = require("axios");
+
 var cheerio = require("cheerio");
 
 // Require all models
@@ -20,8 +23,6 @@ var db = require("./models");
 var app = express();
 
 var PORT = 3000;
-
-
 
 // Set Handlebars as the default templating engine.
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
@@ -66,18 +67,23 @@ app.get("/saved-articles", (req, res) => {
 
 // A GET route for scraping the echoJS website
 app.get("/scrape", function(req, res) {
-  // First, we grab the body of the html with request
-  axios.get("https://www.goodnewsnetwork.org/category/news/").then(function(response) {
+
+  //*//
+  request("https://www.goodnewsnetwork.org/category/news/", function(error, response, html) {
+//  axios.get("https://www.goodnewsnetwork.org/category/news/").then(function(response) {
+
     // Then, we load that into cheerio and save it to $ for a shorthand selector
-    var $ = cheerio.load(response.data);
+    
+    //*//
+    var $ = cheerio.load(html);
+    // var $ = cheerio.load(response.data);
+
 
     db.Article.find({})
       .then(function(dbArticle) {
         // If we were able to successfully find Articles, send them back to the client
          //console.log("JUST ONE:"+dbArticle[1].title);
     
-
-
     // Now, we grab every h2 within an article tag, and do the following:
     $("h3").each(function(i, element) {
       // Save an empty result object
@@ -91,6 +97,7 @@ app.get("/scrape", function(req, res) {
       result.link = $(this)
         .children("a")
         .attr("href");  
+
 
       var duplicate = false;
      // console.log("LENGTH:"+dbArticle.length);
